@@ -91,7 +91,7 @@ body {
   position: absolute;   /* biar bisa diatur posisi */
   left: 5px;            /* jarak dari kiri */
   top: 5px;             /* jarak dari atas container */
-  height: 50px;
+  height: 100px;
   width: auto;
   object-fit: contain;
 }
