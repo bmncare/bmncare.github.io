@@ -1,0 +1,251 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f3f4f6;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1500px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  margin-top: 100px; /* Add margin-top to avoid overlap with datetime section */
+}
+
+.box {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  flex: 1;
+  margin: 0 10px;
+  box-sizing: border-box;
+  min-width: 250px;
+}
+
+.box h1 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  max-height: 345px;
+  overflow-y: auto;
+}
+
+.button {
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #ffffff;
+  background-color: #007bff;
+  text-decoration: none;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+  text-align: center;
+  display: block;
+}
+
+.button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.datetime {
+  position: fixed; /* Use fixed positioning */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 90px; /* Adjust height if needed */
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 1000; /* Ensure it's on top */
+}
+
+.datetime .date {
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.time-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.time-box {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f1f1;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.separator {
+  font-size: 18px;
+  color: #333;
+}
+
+.logout-button {
+  width: 30px; /* Atur lebar tombol lebih besar untuk tampilan mobile */
+  height: 80px; /* Atur tinggi tombol lebih besar untuk tampilan mobile */
+  font-size: 14px; /* Ukuran font lebih kecil di perangkat mobile */
+  color: #ffffff;
+  background-color: #dc3545;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  position: fixed; /* Gunakan fixed positioning untuk mobile juga */
+  top: 5px; /* Atur jarak dari bawah untuk perangkat mobile */
+  right: 5px; /* Atur jarak dari kanan untuk perangkat mobile */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Pastikan tombol tetap di atas konten lainnya */
+}
+
+.logout-button:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+.download-button {
+  width: 30px; /* Atur lebar tombol lebih besar untuk tampilan mobile */
+  height: 80px; /* Atur tinggi tombol lebih besar untuk tampilan mobile */
+  font-size: 14px; /* Ukuran font lebih kecil di perangkat mobile */
+  color: #ffffff;
+  background-color: #28a745;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  position: fixed; /* Gunakan fixed positioning untuk mobile juga */
+  top: 5px; /* Atur jarak dari bawah untuk perangkat mobile */
+  right: 40px; /* Atur jarak dari kanan untuk perangkat mobile */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Pastikan tombol tetap di atas konten lainnya */
+}
+
+.download-button:hover {
+  background-color: #28a745;
+  transform: translateY(-2px);
+}
+
+.download-button-2 {
+  width: 30px; /* Atur lebar tombol lebih besar untuk tampilan mobile */
+  height: 80px; /* Atur tinggi tombol lebih besar untuk tampilan mobile */
+  font-size: 14px; /* Ukuran font lebih kecil di perangkat mobile */
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  position: fixed; /* Gunakan fixed positioning untuk mobile juga */
+  top: 5px; /* Atur jarak dari bawah untuk perangkat mobile */
+  right: 75px; /* Atur jarak dari kanan untuk perangkat mobile */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Pastikan tombol tetap di atas konten lainnya */
+}
+
+.download-button-2:hover {
+  background-color: #007bff;
+  transform: translateY(-2px);
+}
+
+.search-container {
+  margin-bottom: 10px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .logout-button {
+    width: 50px; /* Lebar yang sesuai untuk perangkat mobile */
+    height: 50px; /* Tinggi yang sesuai untuk perangkat mobile */
+    font-size: 14px; /* Ukuran font yang lebih kecil */
+    top: 5px; /* Jarak dari bawah untuk perangkat mobile */
+    right: 5px; /* Jarak dari kanan untuk perangkat mobile */
+    border-radius: 5px;
+    width: 30px;
+    height: 100px;
+  }
+
+  .download-button {
+    width: 50px; /* Lebar yang sesuai untuk perangkat mobile */
+    height: 50px; /* Tinggi yang sesuai untuk perangkat mobile */
+    font-size: 14px; /* Ukuran font yang lebih kecil */
+    top: 5px; /* Jarak dari bawah untuk perangkat mobile */
+    right: 40px; /* Jarak dari kanan untuk perangkat mobile */
+    border-radius: 5px;
+    width: 30px;
+    height: 100px;
+  }
+
+  .download-button-2 {
+    width: 50px; /* Lebar yang sesuai untuk perangkat mobile */
+    height: 50px; /* Tinggi yang sesuai untuk perangkat mobile */
+    font-size: 14px; /* Ukuran font yang lebih kecil */
+    top: 5px; /* Jarak dari bawah untuk perangkat mobile */
+    right: 75px; /* Jarak dari kanan untuk perangkat mobile */
+    border-radius: 5px;
+    width: 30px;
+    height: 100px;
+  }
+
+  .box {
+    width: 100%;
+    max-width: none;
+    margin: 10px 0; /* Add vertical spacing between boxes */
+  }
+
+  .datetime {
+    height: auto; /* Sesuaikan tinggi berdasarkan konten */
+    padding: 20px; /* Padding yang lebih besar untuk perangkat mobile */
+  }
+}
