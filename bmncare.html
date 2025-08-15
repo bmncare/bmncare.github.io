@@ -25,11 +25,11 @@
       </header>
 
       <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <button id="refreshBtn" class="btn-refresh" title="Muat ulang data">&#x21bb; Refresh</button>
+                </div>
         <div id="status" class="small muted">Memuat data...</div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-  <div id="status" class="small muted">Memuat data...</div>
-  <button id="refreshBtn" class="btn-refresh" title="Muat ulang data">&#x21bb; Refresh</button>
-</div>
+
         <form id="bmncareForm" onsubmit="return handleSubmit(event)" autocomplete="off">
           <div class="row">
             <div class="input-container">
@@ -402,5 +402,44 @@
 
       init();
     </script>
+    <script>
+  // 1. Blokir klik kanan
+  document.addEventListener('contextmenu', function (e) {
+    if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+      e.preventDefault();
+    }
+  });
+
+  // 2. Blokir shortcut developer tools & view source
+  document.addEventListener('keydown', function (e) {
+    if (
+      e.key === 'F12' || 
+      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+      (e.ctrlKey && e.key === 'U')
+    ) {
+      e.preventDefault();
+    }
+  });
+
+  // 3. Blokir seleksi teks di luar input/textarea
+  document.addEventListener('selectstart', function (e) {
+    if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+      e.preventDefault();
+    }
+  });
+
+  // 4. Blokir drag & drop gambar atau elemen
+  document.addEventListener('dragstart', function (e) {
+    e.preventDefault();
+  });
+
+  // 5. Blokir copy (kecuali di input/textarea)
+  document.addEventListener('copy', function (e) {
+    if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+      e.preventDefault();
+    }
+  });
+</script>
+
   </body>
 </html>
