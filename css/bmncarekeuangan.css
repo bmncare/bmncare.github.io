@@ -258,7 +258,12 @@ body {
     padding: 20px; /* Padding yang lebih besar untuk perangkat mobile */
   }
 
-    .logo {
-    height: 90px;
-  }
+.datetime .logo {
+  position: absolute;   /* biar bisa diatur posisi */
+  left: 2px;            /* jarak dari kiri */
+  top: 0px;             /* jarak dari atas container */
+  height: 90px;
+  width: auto;
+  object-fit: contain;
+}
 }
