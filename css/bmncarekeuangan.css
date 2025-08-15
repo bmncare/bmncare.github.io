@@ -261,8 +261,8 @@ body {
   .datetime .logo {
   position: absolute;   /* biar bisa diatur posisi */
   left: 2px;            /* jarak dari kiri */
-  top: 0px;             /* jarak dari atas container */
-  height: 100px;
+  top: 2px;             /* jarak dari atas container */
+  height: 110px;
   width: auto;
   object-fit: contain;
 }
