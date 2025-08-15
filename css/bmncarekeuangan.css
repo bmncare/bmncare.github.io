@@ -262,7 +262,7 @@ body {
   position: absolute;   /* biar bisa diatur posisi */
   left: 2px;            /* jarak dari kiri */
   top: 2px;             /* jarak dari atas container */
-  height: 105px;
+  height: 107px;
   width: auto;
   object-fit: contain;
 }
