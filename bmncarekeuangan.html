@@ -30,6 +30,7 @@
     </script>
 
     <div class="datetime" id="datetime">
+      <img src="images/bmncare.png" alt="BMNCARE Logo" class="logo">
       <div class="date" id="date"></div>
       <div class="time-container">
         <div id="hour" class="time-box"></div>
@@ -40,48 +41,43 @@
         <button class="logout-button" onclick="logout()">
           <i class="fas fa-sign-out-alt"></i>
         </button>
-        <button class="download-button" onclick="downloadDocument()" title="Panduan Gsheet Penilaian">
-          <i class="fas fa-download"></i>
-        </button>
-        <button class="download-button-2" onclick="downloadDocument2()" title="Excel TDU">
-          <i class="fas fa-download"></i>
-        </button>
       </div>
     </div>
 
     <div class="container">
-      <!-- GSheet Penilaian Section -->
+      <!-- Form BMRCARE -->
       <div class="box">
-        <h1>GSheet Penilaian</h1>
+        <h1>Form BMRCARE</h1>
         <div class="search-container">
-          <input type="text" class="search-input" placeholder="Search..." oninput="filterButtons('penilaian', this.value)" />
+          <input type="text" class="search-input" placeholder="Search..." oninput="filterButtons('form', this.value)" />
         </div>
-        <div class="button-container" id="penilaian">
-          <a href="https://docs.google.com/spreadsheets/d/1zHbmg8by_edqQz4KZxTTi-QPiQvvgSu12P-GvUlMThM/edit?usp=sharing" class="button" target="_blank">AGAMA KATOLIK_5A_SD</a>
+        <div class="button-container" id="form">
+          <a href="#" class="button" target="_blank">Form BMRCARE</a>
 
           <!-- Add more links as needed -->
         </div>
       </div>
 
-      <!-- Absensi Section -->
+      <!-- Progres BMRCARE -->
       <div class="box">
-        <h1>Absensi</h1>
+        <h1>Progres BMRCARE</h1>
         <div class="search-container">
-          <input type="text" class="search-input" placeholder="Search..." oninput="filterButtons('absensi', this.value)" />
+          <input type="text" class="search-input" placeholder="Search..." oninput="filterButtons('progres', this.value)" />
         </div>
-        <div class="button-container" id="absensi">
+        <div class="button-container" id="progres">
+          <a href="#" class="button" target="_blank">Progres BMRCARE</a>
           <!-- Add more links as needed -->
         </div>
       </div>
 
-      <!-- Ledger Section -->
+      <!-- ACC & Proses BMRCARE -->
       <div class="box">
-        <h1>Ledger</h1>
+        <h1>ACC & Proses BMRCARE</h1>
         <div class="search-container">
-          <input type="text" class="search-input" placeholder="Search..." oninput="filterButtons('ledger', this.value)" />
+          <input type="text" class="search-input" placeholder="Search..." oninput="filterButtons('accproses', this.value)" />
         </div>
-        <div class="button-container" id="ledger">
-          <a href="2526_s1_mlsd.html" class="button" target="_blank">ML_Predik_SD</a>
+        <div class="button-container" id="accproses">
+          <a href="#" class="button" target="_blank">ACC & Proses BMRCARE</a>
 
           <!-- Add more links as needed -->
         </div>
@@ -89,12 +85,12 @@
 
       <!-- Data Master Section -->
       <div class="box">
-        <h1>Data Master</h1>
+        <h1>Data Master BMRCARE</h1>
         <div class="search-container">
           <input type="text" class="search-input" placeholder="Search..." oninput="filterButtons('dataMaster', this.value)" />
         </div>
         <div class="button-container" id="dataMaster">
-          <a href="https://docs.google.com/spreadsheets/d/1ELOc82pFT3jzDE3r11j2ZIR_tiCuGesQpDqvsUdwkTE/edit?usp=sharing" class="button" target="_blank">MASTER_SD</a>
+          <a href="#" class="button" target="_blank">MASTER_SD</a>
 
           <!-- Add more links as needed -->
         </div>
@@ -166,8 +162,8 @@
 
       function downloadDocument() {
         const link = document.createElement("a");
-        link.href = "GSHEET PENILAIAN 2425.pdf"; // Path to the PDF file
-        link.download = "GSHEET PENILAIAN 2425.pdf"; // File name
+        link.href = "GSHEET form 2425.pdf"; // Path to the PDF file
+        link.download = "GSHEET form 2425.pdf"; // File name
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
