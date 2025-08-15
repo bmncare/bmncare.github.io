@@ -141,6 +141,28 @@ input[readonly] {
   background-color: #2563eb;
   color: white;
 }
+.btn-refresh {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-refresh:hover {
+  background-color: #0056b3;
+}
+
+.btn-refresh:active {
+  transform: scale(0.96);
+}
+
 @media (max-width: 640px) {
   .row {
     grid-template-columns: 1fr;
