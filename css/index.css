@@ -21,8 +21,8 @@ body {
 
 .logo {
   max-width: 300px;
-  margin-bottom: 50px;
-  margin-top: 0px;
+  margin-bottom: 100px;
+  margin-top: -50px;
   width: 100%;
   height: auto;
   display: block;
