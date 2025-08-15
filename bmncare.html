@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>BMNCARE</title>
     <link rel="stylesheet" href="css/bmncare.css" />
+    <link rel="icon" href="images/bmncare2.ico" type="image/x-icon">
   </head>
   <body>
     <script>
@@ -25,7 +26,10 @@
 
       <div class="card">
         <div id="status" class="small muted">Memuat data...</div>
-
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+  <div id="status" class="small muted">Memuat data...</div>
+  <button id="refreshBtn" class="btn-refresh" title="Muat ulang data">&#x21bb; Refresh</button>
+</div>
         <form id="bmncareForm" onsubmit="return handleSubmit(event)" autocomplete="off">
           <div class="row">
             <div class="input-container">
@@ -390,6 +394,11 @@
           msg.textContent = "";
         }
       }
+
+      document.getElementById("refreshBtn").addEventListener("click", () => {
+  statusEl.textContent = "Memuat ulang data...";
+  init();
+});
 
       init();
     </script>
