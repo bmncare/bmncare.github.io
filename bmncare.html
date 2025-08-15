@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="css/bmncare.css" />
   </head>
   <body>
+    <script>
+  if (localStorage.getItem("izinbmncare") !== "ya") {
+    alert("Akses ditolak. Silakan buka halaman BMNCARE.");
+    window.location.href = "https://bmncare.github.io/";
+  } else {
+    localStorage.removeItem("izinbmncare");
+  }
+</script>
     <div class="wrap">
       <header>
         <div>
