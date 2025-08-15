@@ -87,6 +87,12 @@ body {
   z-index: 1000; /* Ensure it's on top */
 }
 
+.datetime .logo {
+  height: 50px; /* ukuran proposional */
+  width: auto;
+  object-fit: contain;
+}
+
 .datetime .date {
   font-size: 14px;
   text-align: center;
