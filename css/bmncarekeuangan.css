@@ -90,8 +90,8 @@ body {
 .datetime .logo {
   position: absolute;   /* biar bisa diatur posisi */
   left: 5px;            /* jarak dari kiri */
-  top: 5px;             /* jarak dari atas container */
-  height: 100px;
+  top: 0px;             /* jarak dari atas container */
+  height: 80px;
   width: auto;
   object-fit: contain;
 }
