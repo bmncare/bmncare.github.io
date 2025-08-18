@@ -411,14 +411,27 @@
     }
   });
 
-  // 2. Blokir shortcut developer tools & view source
+  // 2. Blokir shortcut developer tools & view source + ctrl lainnya
   document.addEventListener('keydown', function (e) {
-    if (
-      e.key === 'F12' || 
-      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
-      (e.ctrlKey && e.key === 'U')
-    ) {
-      e.preventDefault();
+    // Kalau target bukan input/textarea, blokir kombinasi keyboard
+    if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || // DevTools
+        (e.ctrlKey && (
+          e.key === 'U' || // View Source
+          e.key === 'S' || // Save
+          e.key === 'P' || // Print
+          e.key === 'C' || // Copy
+          e.key === 'X' || // Cut
+          e.key === 'V' || // Paste
+          e.key === 'A' || // Select All
+          e.key === 'F' || // Find
+          e.key === 'H'    // History
+        ))
+      ) {
+        e.preventDefault();
+      }
     }
   });
 
