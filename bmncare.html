@@ -4,26 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>BMNCARE</title>
-
-    <!-- Link ke CSS eksternal -->
     <link rel="stylesheet" href="css/bmncare.css" />
-
-    <!-- Favicon -->
     <link rel="icon" href="images/bmncare2.ico" type="image/x-icon">
   </head>
   <body>
-
-    <!-- Script validasi akses halaman -->
     <script>
-      if (localStorage.getItem("izinbmncare") !== "ya") {
-        alert("Akses ditolak. Silakan buka halaman BMNCARE.");
-        window.location.href = "https://bmncare.github.io/";
-      } else {
-        localStorage.removeItem("izinbmncare");
-      }
-    </script>
-
-    <!-- Wrapper utama -->
+  if (localStorage.getItem("izinbmncare") !== "ya") {
+    alert("Akses ditolak. Silakan buka halaman BMNCARE.");
+    window.location.href = "https://bmncare.github.io/";
+  } else {
+    localStorage.removeItem("izinbmncare");
+  }
+</script>
     <div class="wrap">
       <header>
         <div>
@@ -32,59 +24,45 @@
         </div>
       </header>
 
-      <!-- Card utama untuk form -->
       <div class="card">
         
-        <!-- Status data + tombol refresh -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
           <div id="status" class="small muted">Memuat data...</div>
           <button id="refreshBtn" class="btn-refresh" title="Muat ulang data">&#x21bb;</button>
         </div>
 
-        <!-- Form pengajuan -->
         <form id="bmncareForm" onsubmit="return handleSubmit(event)" autocomplete="off">
           <div class="row">
-            
-            <!-- Pilih NIP -->
             <div class="input-container">
               <label for="nipSearch">Pilih NIP & Nama</label>
               <input id="nipSearch" placeholder="Ketik untuk mencari NIP..." autocomplete="off" required />
               <div id="nipList" class="dropdown-list"></div>
             </div>
-
-            <!-- Nama otomatis -->
             <div>
               <label for="nameBox">Nama</label>
               <input id="nameBox" readonly placeholder="Nama akan muncul otomatis" />
             </div>
-
-            <!-- Pilih barang -->
             <div class="input-container">
               <label for="barangSearch">Barang</label>
               <input id="barangSearch" placeholder="Ketik untuk mencari barang..." autocomplete="off" required disabled />
               <div id="barangList" class="dropdown-list"></div>
             </div>
-
-            <!-- Tanggal laporan -->
             <div>
               <label for="tanggal">Tanggal Laporan</label>
               <input id="tanggal" type="date" required />
             </div>
 
-            <!-- Link foto opsional -->
+            <!-- Tambahan input link foto -->
             <div class="full">
               <label for="linkFoto">Link Foto (opsional)</label>
               <input id="linkFoto" type="url" placeholder="Masukkan URL foto, boleh dikosongkan" />
             </div>
 
-            <!-- Keterangan kerusakan -->
             <div class="full">
               <label for="keterangan">Keterangan Kerusakan</label>
               <textarea id="keterangan" placeholder="Jelaskan kerusakan..." required></textarea>
             </div>
           </div>
-
-          <!-- Tombol kirim + pesan status -->
           <div style="display: flex; gap: 12px; align-items: center; margin-top: 10px">
             <button class="btn" type="submit">KIRIM PENGAJUAN</button>
             <div id="msg" class="small muted" role="alert" aria-live="polite"></div>
@@ -93,16 +71,13 @@
       </div>
     </div>
 
-    <!-- Script utama untuk fetch data & submit -->
     <script>
-      // === KONFIGURASI DASAR ===
       const SPREADSHEET_ID = "1GusJ_ocCMw_j2aCnxIcWZNmTkZ9lyCTCKFcRt5y8Nko";
       const STAFF_SHEET = "base staff";
       const REKAP_SHEET = "rekap peminjaman";
       const PENGAJUAN_SHEET = "pengajuan";
       const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzafgutjJk1PyKbU-VtD-5kzPvy-8oYoRSZdRTbj9ZuubNO2oVvm0g0fdEK7Ib2wzWprg/exec";
 
-      // Ambil elemen DOM penting
       const statusEl = document.getElementById("status");
       const nipSearch = document.getElementById("nipSearch");
       const nipList = document.getElementById("nipList");
@@ -113,36 +88,49 @@
       const msg = document.getElementById("msg");
       const linkFoto = document.getElementById("linkFoto");
 
-      // === HELPER UNTUK FETCH DATA ===
       function csvUrl(sheetName) {
         return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
       }
 
-      // Parsing CSV manual
       function parseCSV(text) {
         const rows = [];
-        let row = [], cur = "", inQuotes = false;
+        let row = [],
+          cur = "",
+          inQuotes = false;
         for (let i = 0; i < text.length; i++) {
-          const ch = text[i], nxt = text[i + 1];
+          const ch = text[i],
+            nxt = text[i + 1];
           if (ch === '"') {
             if (inQuotes && nxt === '"') {
-              cur += '"'; i++; continue;
+              cur += '"';
+              i++;
+              continue;
             }
-            inQuotes = !inQuotes; continue;
+            inQuotes = !inQuotes;
+            continue;
           }
           if (!inQuotes && (ch === "," || ch === "\n" || ch === "\r")) {
-            if (ch === ",") { row.push(cur); cur = ""; continue; }
-            row.push(cur); cur = ""; rows.push(row); row = [];
+            if (ch === ",") {
+              row.push(cur);
+              cur = "";
+              continue;
+            }
+            row.push(cur);
+            cur = "";
+            rows.push(row);
+            row = [];
             if (ch === "\r" && text[i + 1] === "\n") i++;
             continue;
           }
           cur += ch;
         }
-        if (cur !== "" || row.length) { row.push(cur); rows.push(row); }
+        if (cur !== "" || row.length) {
+          row.push(cur);
+          rows.push(row);
+        }
         return rows;
       }
 
-      // Ambil data dari Google Sheets
       async function fetchSheetCSV(sheetName) {
         const res = await fetch(csvUrl(sheetName));
         if (!res.ok) throw new Error("Gagal ambil " + sheetName);
@@ -150,31 +138,22 @@
         return parseCSV(txt);
       }
 
-      // === INISIALISASI DATA ===
       async function init() {
         try {
           statusEl.textContent = "Memuat data staff...";
           const staffCsv = await fetchSheetCSV(STAFF_SHEET);
-
           statusEl.textContent = "Memuat rekap peminjaman...";
           const rekapCsv = await fetchSheetCSV(REKAP_SHEET);
-
-          // Mapping data staff
           const staffData = staffCsv
             .slice(1)
             .map((r) => ({ nip: r[1]?.trim(), nama: r[2]?.trim() }))
             .filter((s) => s.nip);
-
-          // Mapping data barang
           const rekapData = rekapCsv
             .slice(1)
             .map((r) => ({ nip: r[1]?.trim(), barang: r[3]?.trim() }))
             .filter((s) => s.nip);
-
           window.__STAFF = staffData;
           window.__REKAP = rekapData;
-
-          // Isi dropdown NIP
           populateNipList(staffData);
           statusEl.textContent = "BMNCARE Siap Menjaga Aset Negara";
         } catch (err) {
@@ -182,56 +161,300 @@
         }
       }
 
-      // Fungsi refresh manual
-      document.getElementById("refreshBtn").addEventListener("click", () => {
-        statusEl.textContent = "Memuat ulang data...";
-        init();
+      // --- NIP searchable dropdown ---
+      function populateNipList(list) {
+        nipList.innerHTML = list.map((s) => `<div class="dropdown-item" data-nip="${s.nip}" data-nama="${s.nama}">${s.nip} - ${s.nama}</div>`).join("");
+      }
+
+      function filterNipList(query) {
+        const filtered = window.__STAFF.filter((s) => `${s.nip} ${s.nama}`.toLowerCase().includes(query.toLowerCase()));
+        if (filtered.length === 0) {
+          nipList.innerHTML = '<div class="dropdown-item" style="cursor: default; color:#888;">Tidak ditemukan</div>';
+        } else {
+          nipList.innerHTML = filtered.map((s) => `<div class="dropdown-item" data-nip="${s.nip}" data-nama="${s.nama}">${s.nip} - ${s.nama}</div>`).join("");
+        }
+      }
+
+      nipSearch.addEventListener("focus", () => {
+        const val = nipSearch.value.trim();
+        if (!val) {
+          populateNipList(window.__STAFF);
+        } else {
+          filterNipList(val);
+        }
+        nipList.style.display = "block";
       });
 
-      // Jalankan pertama kali
+      nipSearch.addEventListener("input", (e) => {
+        const val = e.target.value.trim();
+        if (!val) {
+          populateNipList(window.__STAFF);
+        } else {
+          filterNipList(val);
+        }
+        nipList.style.display = "block";
+      });
+
+      nipList.addEventListener("click", (e) => {
+        const item = e.target.closest(".dropdown-item");
+        if (!item || item.style.cursor === "default") return;
+        const nip = item.getAttribute("data-nip");
+        const nama = item.getAttribute("data-nama");
+        nipSearch.value = `${nip} - ${nama}`;
+        nameBox.value = nama;
+        nipList.style.display = "none";
+        // Populate barang accordingly
+        populateBarangForNIP(nip);
+      });
+
+      // --- Barang searchable dropdown ---
+      function populateBarangList(list) {
+        if (!list.length) {
+          barangList.innerHTML = '<div class="dropdown-item" style="cursor: default; color:#888;">(tidak ada barang)</div>';
+          return;
+        }
+        barangList.innerHTML = list.map((b) => `<div class="dropdown-item" data-barang="${b}">${b}</div>`).join("");
+      }
+
+      function filterBarangList(query) {
+        const filtered = (window.__BARANG_LIST || []).filter((b) => b.toLowerCase().includes(query.toLowerCase()));
+        if (filtered.length === 0) {
+          barangList.innerHTML = '<div class="dropdown-item" style="cursor: default; color:#888;">Tidak ditemukan</div>';
+        } else {
+          populateBarangList(filtered);
+        }
+      }
+
+      barangSearch.addEventListener("focus", () => {
+        const val = barangSearch.value.trim();
+        if (!val) {
+          populateBarangList(window.__BARANG_LIST || []);
+        } else {
+          filterBarangList(val);
+        }
+        barangList.style.display = "block";
+      });
+
+      barangSearch.addEventListener("input", (e) => {
+        const val = e.target.value.trim();
+        if (!val) {
+          populateBarangList(window.__BARANG_LIST || []);
+        } else {
+          filterBarangList(val);
+        }
+        barangList.style.display = "block";
+      });
+
+      barangList.addEventListener("click", (e) => {
+        const item = e.target.closest(".dropdown-item");
+        if (!item || item.style.cursor === "default") return;
+        const barang = item.getAttribute("data-barang");
+        barangSearch.value = barang;
+        barangList.style.display = "none";
+      });
+
+      function populateBarangForNIP(nip) {
+        barangSearch.value = "";
+        barangList.style.display = "none";
+        if (!nip) {
+          barangSearch.disabled = true;
+          window.__BARANG_LIST = [];
+          return;
+        }
+        barangSearch.disabled = false;
+        const items = [...new Set(window.__REKAP.filter((r) => r.nip === nip && r.barang).map((r) => r.barang))];
+        window.__BARANG_LIST = items;
+        populateBarangList(items);
+      }
+
+      // Tutup dropdown jika klik di luar input dan dropdown itu sendiri
+      document.addEventListener("click", (e) => {
+        if (!nipList.contains(e.target) && e.target !== nipSearch) {
+          nipList.style.display = "none";
+        }
+        if (!barangList.contains(e.target) && e.target !== barangSearch) {
+          barangList.style.display = "none";
+        }
+      });
+
+      tanggalInput.valueAsDate = new Date();
+
+      async function generateKodePengajuan(nip) {
+        const pengajuanCsv = await fetchSheetCSV(PENGAJUAN_SHEET);
+        const now = new Date();
+        const dd = String(now.getDate()).padStart(2, "0");
+        const mm = String(now.getMonth() + 1).padStart(2, "0");
+        const yy = String(now.getFullYear()).slice(2);
+        const last4 = nip.slice(-4);
+        const prefix = `BMN${dd}${mm}${yy}${last4}`;
+        const existing = pengajuanCsv
+          .slice(1)
+          .map((r) => r[1] || "")
+          .filter((k) => k.startsWith(prefix));
+        const nextNum = String(existing.length + 1).padStart(3, "0");
+        return `${prefix}${nextNum}`;
+      }
+
+      async function handleSubmit(e) {
+        e.preventDefault();
+        msg.textContent = "";
+
+        // Ambil NIP dari nipSearch (ambil bagian sebelum spasi)
+        let nip = "";
+        if (nipSearch.value.includes(" ")) {
+          nip = nipSearch.value.split(" ")[0];
+        }
+
+        const nama = nameBox.value,
+          barang = barangSearch.value,
+          tanggal = tanggalInput.value;
+        const ket = document.getElementById("keterangan").value;
+        const foto = linkFoto.value.trim();
+
+        if (!nip) {
+          msg.textContent = "Pilih NIP.";
+          return;
+        }
+        if (!barang) {
+          msg.textContent = "Pilih barang.";
+          return;
+        }
+        if (!tanggal) {
+          msg.textContent = "Pilih tanggal laporan.";
+          return;
+        }
+        if (!ket.trim()) {
+          msg.textContent = "Isi keterangan kerusakan.";
+          return;
+        }
+
+        try {
+          statusEl.textContent = "Membuat kode pengajuan...";
+          const kode = await generateKodePengajuan(nip);
+          const timestamp = new Date().toISOString();
+
+          const params = new URLSearchParams({
+            timestamp,
+            kode,
+            nip,
+            nama,
+            barang,
+            tanggal,
+            keterangan: ket,
+            foto: foto, // Kirimkan link foto, bisa kosong
+            status: "Diajukan",
+          });
+
+          statusEl.textContent = "Mengirim data...";
+
+          const res = await fetch(WEBAPP_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: params.toString(),
+          });
+
+          const result = await res.json();
+          if (result.result === "error") {
+            statusEl.innerHTML = `<span class="error">${result.message}</span>`;
+            return;
+          }
+
+          statusEl.textContent = "Berhasil dikirim.";
+          msg.innerHTML = `
+      Pengajuan <strong>${kode}</strong> berhasil diajukan.
+      <button id="copyBtn" aria-label="Salin kode pengajuan" title="Salin kode pengajuan" style="
+        margin-left:8px;
+        background:none;
+        border:none;
+        cursor:pointer;
+        font-size:18px;
+        vertical-align: middle;
+      ">📋</button>
+    `;
+
+          // Reset form kecuali tanggal default hari ini
+          document.getElementById("bmncareForm").reset();
+          tanggalInput.valueAsDate = new Date();
+          nameBox.value = "";
+          barangSearch.value = "";
+          barangSearch.disabled = true;
+          window.__BARANG_LIST = [];
+          nipSearch.value = "";
+          nipList.style.display = "none";
+          barangList.style.display = "none";
+          linkFoto.value = "";
+
+          // Tambahkan event copy
+          document.getElementById("copyBtn").addEventListener("click", () => {
+            navigator.clipboard.writeText(kode).then(() => {
+              msg.textContent = "Kode pengajuan berhasil disalin ke clipboard.";
+            });
+          });
+        } catch (err) {
+          statusEl.innerHTML = `<span class="error">${err.message}</span>`;
+          msg.textContent = "";
+        }
+      }
+
+      document.getElementById("refreshBtn").addEventListener("click", () => {
+  statusEl.textContent = "Memuat ulang data...";
+  init();
+});
+
       init();
     </script>
-
-    <!-- Script tambahan: blokir interaksi -->
     <script>
-      // 1. Blokir klik kanan (kecuali input/textarea)
-      document.addEventListener('contextmenu', function (e) {
-        if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
-          e.preventDefault();
-        }
-      });
+  // 1. Blokir klik kanan
+  document.addEventListener('contextmenu', function (e) {
+    if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+      e.preventDefault();
+    }
+  });
 
-      // 2. Blokir shortcut Developer Tools + View Source + Save (Ctrl+S)
-      document.addEventListener('keydown', function (e) {
-        if (
-          e.key === 'F12' || 
-          (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
-          (e.ctrlKey && e.key === 'U') || 
-          (e.ctrlKey && e.key === 's') // 🔒 tambahan blokir Ctrl+S
-        ) {
-          e.preventDefault();
-        }
-      });
+  // 2. Blokir shortcut developer tools & view source
+  document.addEventListener('keydown', function (e) {
+    if (
+      e.key === 'F12' || 
+      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+      (e.ctrlKey && e.key === 'U')
+    ) {
+      e.preventDefault();
+    }
+  });
 
-      // 3. Blokir seleksi teks (kecuali input/textarea)
-      document.addEventListener('selectstart', function (e) {
-        if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
-          e.preventDefault();
-        }
-      });
+  // 3. Blokir seleksi teks di luar input/textarea
+  document.addEventListener('selectstart', function (e) {
+    if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+      e.preventDefault();
+    }
+  });
 
-      // 4. Blokir drag & drop
-      document.addEventListener('dragstart', function (e) {
-        e.preventDefault();
-      });
+  // 4. Blokir drag & drop gambar atau elemen
+  document.addEventListener('dragstart', function (e) {
+    e.preventDefault();
+  });
 
-      // 5. Blokir copy (kecuali input/textarea)
-      document.addEventListener('copy', function (e) {
-        if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
-          e.preventDefault();
-        }
-      });
-    </script>
+  // 5. Blokir copy (kecuali di input/textarea)
+  document.addEventListener('copy', function (e) {
+    if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+      e.preventDefault();
+    }
+  });
+</script>
+
+<script>
+  // Blokir shortcut developer tools, view source, dan save page
+  document.addEventListener('keydown', function (e) {
+    if (
+      e.key === 'F12' || 
+      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+      (e.ctrlKey && e.key === 'U') ||
+      (e.ctrlKey && e.key.toLowerCase() === 's') // <--- tambahin ini untuk blok Ctrl+S
+    ) {
+      e.preventDefault();
+    }
+  });
+</script>
 
   </body>
 </html>
