@@ -16,11 +16,11 @@
       // Define the access permissions for each page
       const accessPermissions = {
         "/bmncarekeuangan.html": "bmncarekeuangan",
-        "/bmncaremaintenance.html": "bmncaremaintenance",
-        "/bmncarepengelolaanaset.html": "bmncarepengelolaanaset",
+        "/bmncarebmn.html": "bmncarebmn",
+        "/bmncareinventaris.html": "bmncareinventaris",
         "/bmncarekeuangan2.html": "bmncarekeuangan2",
-        "/bmncaremaintenance2.html": "bmncaremaintenance2",
-        "/bmncarepengelolaanaset2.html": "bmncarepengelolaanaset2",
+        "/bmncarebmn2.html": "bmncarebmn2",
+        "/bmncareinventaris2.html": "bmncareinventaris2",
       };
 
       // Get the current page URL and access granted
@@ -85,6 +85,19 @@
         </div>
         <div class="button-container" id="accproses">
           <a href="https://docs.google.com/spreadsheets/d/1S6Bv-VZ5ow0AKVomEix28yp_3YULvSOqZxyAtxIMJqQ/edit?usp=sharing" class="button" target="_blank">Proses BMNCARE</a>
+
+          <!-- Add more links as needed -->
+        </div>
+      </div>
+
+            <!-- Data Master Section -->
+      <div class="box">
+        <h1>Data Master</h1>
+        <div class="search-container">
+          <input type="text" class="search-input" placeholder="Search..." oninput="filterButtons('dataMaster', this.value)" />
+        </div>
+        <div class="button-container" id="dataMaster">
+          <a href="https://docs.google.com/spreadsheets/d/12pSZJecn3hwH0wTLRQ72BMin_wY-S6_5TMknuYjSNi0/edit?usp=sharing" class="button" target="_blank">MASTER_STAFF</a>
 
           <!-- Add more links as needed -->
         </div>
