@@ -279,21 +279,35 @@
 
       tanggalInput.valueAsDate = new Date();
 
-      async function generateKodePengajuan(nip) {
-        const pengajuanCsv = await fetchSheetCSV(PENGAJUAN_SHEET);
-        const now = new Date();
-        const dd = String(now.getDate()).padStart(2, "0");
-        const mm = String(now.getMonth() + 1).padStart(2, "0");
-        const yy = String(now.getFullYear()).slice(2);
-        const last4 = nip.slice(-4);
-        const prefix = `BMN${dd}${mm}${yy}${last4}`;
-        const existing = pengajuanCsv
-          .slice(1)
-          .map((r) => r[1] || "")
-          .filter((k) => k.startsWith(prefix));
-        const nextNum = String(existing.length + 1).padStart(3, "0");
-        return `${prefix}${nextNum}`;
-      }
+async function generateKodePengajuan(nip) {
+  const pengajuanCsv = await fetchSheetCSV(PENGAJUAN_SHEET);
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2, "0");
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  const yy = String(now.getFullYear()).slice(2); // 2 digit tahun
+  const last4 = nip.slice(-4);
+  
+  const prefix = `BMN${dd}${mm}${yy}${last4}`;
+
+  // cari semua kode dengan tahun & last4 sama
+  const existing = pengajuanCsv
+    .slice(1)
+    .map(r => r[1] || "")
+    .filter(k => k.startsWith(`BMN`) && k.slice(9,11) === yy && k.includes(last4));
+
+  // ambil nomor urut paling besar (3 digit terakhir)
+  let maxNum = 0;
+  existing.forEach(k => {
+    const num = parseInt(k.slice(-3), 10);
+    if (!isNaN(num) && num > maxNum) {
+      maxNum = num;
+    }
+  });
+
+  const nextNum = String(maxNum + 1).padStart(3, "0");
+  return `${prefix}${nextNum}`;
+}
+
 
       async function handleSubmit(e) {
         e.preventDefault();
