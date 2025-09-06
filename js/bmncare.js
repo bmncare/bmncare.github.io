@@ -1,5 +1,5 @@
 const bmncare = {
-  care10: "bmncarekeuangan",
+  care10: "bmncarepusatdatadansisteminformasi",
   care20: "bmncarebmn",
   care30: "bmncareinventaris",
   care40: "bmncarekeuangan2",
