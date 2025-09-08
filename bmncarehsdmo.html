@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BMNCARE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="css/bmncared.css" />
+    <link rel="icon" href="images/bmncare2.ico" type="image/x-icon">
+  </head>
+  <body>
+    <script>
+      localStorage.setItem("izinbmncare", "ya");
+    </script>
+    <script>
+      // Define the access permissions for each page
+      const accessPermissions = {
+        "/bmncarepusatdatadansisteminformasi.html": "bmncarepusatdatadansisteminformasi",
+        "/bmncarebiroumum.html": "bmncarebiroumum",
+        "/bmncarebiroumum2.html": "bmncarebiroumum2",
+        "/bmncarehsdmo.html": "bmncarehsdmo",
+      };
+
+      // Get the current page URL and access granted
+      const currentPage = window.location.pathname;
+      const accessGranted = sessionStorage.getItem("accessGranted");
+
+      // Check if the current page is allowed for the granted access
+      if (accessGranted !== accessPermissions[currentPage]) {
+        window.location.href = "/"; // Redirect to login page
+      }
+    </script>
+
+    <div class="datetime" id="datetime">
+      <picture>
+        <source srcset="images/bmncare1.jpg" media="(max-width: 768px)">
+        <img src="images/bmncare.png" alt="BMNCARE Logo" class="logo">
+      </picture>
+      <div class="date" id="date"></div>
+      <div class="time-container">
+        <div id="hour" class="time-box"></div>
+        <span class="separator">:</span>
+        <div id="minute" class="time-box"></div>
+        <span class="separator">:</span>
+        <div id="second" class="time-box"></div>
+        <button class="logout-button" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Form -->
+      <div class="box">
+        <h1>Form</h1>
+        <div class="search-container">
+          <input type="text" class="search-input" placeholder="Search..." oninput="filterButtons('form', this.value)" />
+        </div>
+        <div class="button-container" id="form">
+          <a href="bmncare.html" class="button" target="_blank">Form BMNCARE</a>
+
+          <!-- Add more links as needed -->
+        </div>
+      </div>
+
+      <!-- Progres -->
+      <div class="box">
+        <h1>Progres</h1>
+        <div class="search-container">
+          <input type="text" class="search-input" placeholder="Search..." oninput="filterButtons('progres', this.value)" />
+        </div>
+        <div class="button-container" id="progres">
+          <a href="https://docs.google.com/spreadsheets/d/1RCB57XV6cDq421HAGtpMnS7fOkUxby7GTWrMnGZLO9I/edit?usp=sharing" class="button" target="_blank">Progres BMNCARE</a>
+          <!-- Add more links as needed -->
+        </div>
+      </div>
+
+      <!-- Data Master Section -->
+      <div class="box">
+        <h1>Data Master</h1>
+        <div class="search-container">
+          <input type="text" class="search-input" placeholder="Search..." oninput="filterButtons('dataMaster', this.value)" />
+        </div>
+        <div class="button-container" id="dataMaster">
+          <a href="https://docs.google.com/spreadsheets/d/1pAzh0RCmRP72RLrF3P-w0xSn10vMAkYEKhQ63UTurHA/edit?usp=sharing" class="button" target="_blank">MASTER_STAFF</a>
+
+          <!-- Add more links as needed -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function updateDateTime() {
+        const now = new Date();
+        const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+        const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        const dayName = days[now.getDay()];
+        const monthName = months[now.getMonth()];
+        const day = now.getDate();
+        const year = now.getFullYear();
+        const hour = String(now.getHours()).padStart(2, "0");
+        const minute = String(now.getMinutes()).padStart(2, "0");
+        const second = String(now.getSeconds()).padStart(2, "0");
+
+        document.getElementById("date").textContent = `${dayName}, ${day} ${monthName} ${year}`;
+        document.getElementById("hour").textContent = hour;
+        document.getElementById("minute").textContent = minute;
+        document.getElementById("second").textContent = second;
+      }
+
+      function logout() {
+        sessionStorage.removeItem("accessGranted"); // Clear the access flag
+        window.location.href = "/"; // Redirect to the base URL
+      }
+
+      function filterButtons(containerId, searchTerm) {
+        const container = document.getElementById(containerId);
+        const buttons = container.getElementsByClassName("button");
+        for (let button of buttons) {
+          if (button.textContent.toLowerCase().includes(searchTerm.toLowerCase())) {
+            button.style.display = "block";
+          } else {
+            button.style.display = "none";
+          }
+        }
+      }
+
+      // Disable right-click context menu
+      document.addEventListener("contextmenu", function (event) {
+        event.preventDefault();
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.ctrlKey && event.key === "u") {
+          event.preventDefault();
+        }
+      });
+
+      document.addEventListener("keydown", function (event) {
+        // Prevent Ctrl+Shift+I (DevTools), Ctrl+Shift+J (DevTools), Ctrl+U (View Page Source)
+        if (event.ctrlKey && event.shiftKey && event.key === "I") {
+          event.preventDefault();
+        }
+
+        // Prevent F12 (DevTools)
+        if (event.key === "F12") {
+          event.preventDefault();
+        }
+      });
+
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+
+      function downloadDocument() {
+        const link = document.createElement("a");
+        link.href = "GSHEET form 2425.pdf"; // Path to the PDF file
+        link.download = "GSHEET form 2425.pdf"; // File name
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      function downloadDocument2() {
+        const link = document.createElement("a");
+        link.href = "TDU_SD_2526_S1.xlsx"; // Path to the PDF file
+        link.download = "TDU_SD_2526_S1.xlsx"; // File name
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      document.addEventListener("keydown", function (event) {
+        if (event.ctrlKey && event.key === "s") {
+          event.preventDefault();
+        }
+      });
+    </script>
+  </body>
+</html>
