@@ -74,7 +74,7 @@
     <script>
       const SPREADSHEET_ID = "1GusJ_ocCMw_j2aCnxIcWZNmTkZ9lyCTCKFcRt5y8Nko";
       const STAFF_SHEET = "base staff";
-      const REKAP_SHEET = "rekap peminjaman";
+      const REKAP_SHEET = "rekap inventaris real-time";
       const PENGAJUAN_SHEET = "pengajuan";
       const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzrOuxwpeo8j2NCOqHlTo7CwiUEEjKJWxgQUvq6DLGICoXuFGOMx6ATVJNJoXZrf6ED9w/exec";
 
@@ -142,7 +142,7 @@
         try {
           statusEl.textContent = "Memuat data staff...";
           const staffCsv = await fetchSheetCSV(STAFF_SHEET);
-          statusEl.textContent = "Memuat rekap peminjaman...";
+          statusEl.textContent = "Memuat rekap inventaris...";
           const rekapCsv = await fetchSheetCSV(REKAP_SHEET);
           const staffData = staffCsv
             .slice(1)
