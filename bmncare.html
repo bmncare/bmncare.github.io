@@ -280,11 +280,31 @@
       tanggalInput.valueAsDate = new Date();
 
 // Helper: cek apakah barang persis ada di daftar (exact match)
-function isBarangValid(value) {
+function isBarangValid(value, nip) {
   if (!value) return false;
   const v = value.trim();
-  if (!window.__BARANG_LIST || !Array.isArray(window.__BARANG_LIST)) return false;
-  return window.__BARANG_LIST.includes(v);
+  // gunakan daftar barang yang sudah ada, atau bangkitkan dari data rekap jika kosong
+  let list = (window.__BARANG_LIST && Array.isArray(window.__BARANG_LIST) && window.__BARANG_LIST.length) ? window.__BARANG_LIST : [...new Set((window.__REKAP || []).filter(r => r.nip === nip && r.barang).map(r => r.barang))];
+  return list.includes(v);
+}
+
+// Helper: cek apakah input NIP cocok persis dengan daftar (format "nip - nama" atau hanya nip)
+function isNipValid(input) {
+  if (!input) return false;
+  const v = input.trim();
+  if (!window.__STAFF || !Array.isArray(window.__STAFF)) return false;
+  return window.__STAFF.some(s => `${s.nip} - ${s.nama}` === v || s.nip === v);
+}
+
+// Helper: jika input sesuai, ambil nilai NIP saja
+function resolveNip(input) {
+  if (!input) return "";
+  const v = input.trim();
+  const byFull = (window.__STAFF || []).find(s => `${s.nip} - ${s.nama}` === v);
+  if (byFull) return byFull.nip;
+  const byNip = (window.__STAFF || []).find(s => s.nip === v);
+  if (byNip) return byNip.nip;
+  return "";
 }
 
 async function generateKodePengajuan(nip) {
@@ -324,11 +344,21 @@ async function generateKodePengajuan(nip) {
         e.preventDefault();
         msg.textContent = "";
 
-        // Ambil NIP dari nipSearch (ambil bagian sebelum spasi)
-        let nip = "";
-        if (nipSearch.value.includes(" ")) {
-          nip = nipSearch.value.split(" ")[0];
+        // Ambil input NIP penuh dari field (bisa berbentuk "nip - nama" atau hanya nip)
+        const nipInputRaw = nipSearch.value.trim();
+
+        // VALIDASI NIP: harus persis ada di daftar
+        if (!isNipValid(nipInputRaw)) {
+          msg.textContent = "Pilih NIP dari daftar (ketik lalu pilih dari dropdown).";
+          return;
         }
+
+        // resolve menjadi nilai nip yang bersih
+        const nip = resolveNip(nipInputRaw);
+
+        // isi nama otomatis jika belum terisi (berguna bila user mengetik nip saja)
+        const staff = (window.__STAFF || []).find(s => s.nip === nip);
+        if (staff) nameBox.value = staff.nama;
 
         const nama = nameBox.value,
           barang = barangSearch.value,
@@ -336,17 +366,13 @@ async function generateKodePengajuan(nip) {
         const ket = document.getElementById("keterangan").value;
         const foto = linkFoto.value.trim();
 
-        if (!nip) {
-          msg.textContent = "Pilih NIP.";
-          return;
-        }
+        // VALIDASI BARANG: harus persis ada pada daftar barang untuk nip yang dipilih
         if (!barang) {
           msg.textContent = "Pilih barang.";
           return;
         }
 
-        // NEW: pastikan barang yang diketik adalah *persis* sama dengan salah satu item dropdown
-        if (!isBarangValid(barang)) {
+        if (!isBarangValid(barang, nip)) {
           msg.textContent = "Pilih barang dari daftar (ketik lalu pilih dari dropdown).";
           return;
         }
