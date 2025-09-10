@@ -279,6 +279,14 @@
 
       tanggalInput.valueAsDate = new Date();
 
+// Helper: cek apakah barang persis ada di daftar (exact match)
+function isBarangValid(value) {
+  if (!value) return false;
+  const v = value.trim();
+  if (!window.__BARANG_LIST || !Array.isArray(window.__BARANG_LIST)) return false;
+  return window.__BARANG_LIST.includes(v);
+}
+
 async function generateKodePengajuan(nip) {
   const pengajuanCsv = await fetchSheetCSV(PENGAJUAN_SHEET);
   const now = new Date();
@@ -336,6 +344,13 @@ async function generateKodePengajuan(nip) {
           msg.textContent = "Pilih barang.";
           return;
         }
+
+        // NEW: pastikan barang yang diketik adalah *persis* sama dengan salah satu item dropdown
+        if (!isBarangValid(barang)) {
+          msg.textContent = "Pilih barang dari daftar (ketik lalu pilih dari dropdown).";
+          return;
+        }
+
         if (!tanggal) {
           msg.textContent = "Pilih tanggal laporan.";
           return;
